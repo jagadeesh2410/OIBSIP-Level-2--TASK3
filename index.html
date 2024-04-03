@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To-Do List</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-wrap: wrap;
+        background-color:black;
+    }
+
+    h1 {
+        text-align: center;
+        color: white;
+        font-weight: bold;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .container-l {
+        width: 30%;
+        margin-right: 5px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        display: flex;
+    }
+    .container-r {
+        width: 65%;
+        margin-left: 5px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        display: flex;
+    }
+
+
+    .form-container,
+    .task-container {
+        flex: 1;
+        padding: 20px;
+        margin: 15px;
+    }
+
+    .form-container {
+        background-color: rgb(211, 175, 16);
+    }
+
+    .task-container {
+        background-color: #76b7ec;
+    }
+
+    .form-container {
+        border-right: 1px solid #ccc;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 90%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        background-color: #d0dbe7;
+        border-radius: 5px;
+        resize: none;
+    }
+
+    .form-group textarea {
+        height: 100px;
+    }
+
+    .form-group input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 10px;
+    }
+
+    .form-group input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    .tasks {
+        padding: 20px;
+        overflow-y: auto;
+    }
+
+    .task {
+        margin-left: 10px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        padding: 20px;
+        margin-bottom: 20px;
+        display: flex;
+    }
+
+    .task:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
+    .task-title,
+    .task-description,
+    .delete-btn {
+        flex: 1;
+    }
+
+    .task-title {
+        font-weight: bold;
+    }
+
+    .delete-btn {
+        text-align: center;
+    }
+
+    .delete-btn button {
+        background-color: #ff6347;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+    }
+
+    .delete-btn button:hover {
+        background-color: #ff3b00;
+    }
+
+    .headings {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        padding: 10px;
+    }
+
+    .headings div {
+        flex: 1;
+        text-align: center;
+    }
+
+    hr {
+        margin: 20px 0;
+        border: none;
+        border-top: 1px solid #ccc;
+    }
+</style>
+</head>
+<body>
+<h1>To-Do Web App</h1>
+<div class="container-l">
+    <div class="form-container">
+        <h2 style="text-align: center;">Add Task</h2>
+        <form id="taskForm">
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add Task">
+            </div>
+        </form>
+    </div>
+   
+</div>
+<div class="container-r">
+    <div class="task-container">
+        <h2 style="text-align: center;">Tasks</h2>
+        <div class="headings">
+            <div>Title</div>
+            <div>Description</div>
+            <div>Delete</div>
+        </div>
+        <hr>
+        <div class="tasks" id="taskList"></div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('taskForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        saveTask();
+    });
+
+    function saveTask() {
+        const title = document.getElementById('title').value.trim();
+        const description = document.getElementById('description').value.trim();
+
+        if (title === '' || description === '') {
+            alert('Title and Description are required!');
+            return;
+        }
+
+        const taskList = document.getElementById('taskList');
+        const taskDiv = document.createElement('div');
+        taskDiv.className = 'task';
+
+        const titleElem = document.createElement('div');
+        titleElem.className = 'task-title';
+        titleElem.textContent = title;
+
+        const descriptionElem = document.createElement('div');
+        descriptionElem.className = 'task-description';
+        descriptionElem.textContent = description;
+
+        const deleteBtn = document.createElement('div');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.innerHTML = '<button>X</button>';
+        deleteBtn.querySelector('button').addEventListener('click', function () {
+            taskList.removeChild(taskDiv);
+        });
+
+        taskDiv.appendChild(titleElem);
+        taskDiv.appendChild(descriptionElem);
+        taskDiv.appendChild(deleteBtn);
+
+        taskList.appendChild(taskDiv);
+
+        document.getElementById('title').value = '';
+        document.getElementById('description').value = '';
+    }
+</script>
+</body>
+</html>
